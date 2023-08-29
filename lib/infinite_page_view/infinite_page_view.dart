@@ -30,7 +30,6 @@ class _InfinitePageViewState extends State<InfinitePageView> {
   void _onPageChanged(int index) {
     int actualIndex = index == 0 ? -1 : 0;
     _provider.onPageChanged(actualIndex);
-
     widget.onPageChanged?.call(actualIndex);
   }
 
