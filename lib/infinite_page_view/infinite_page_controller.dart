@@ -15,13 +15,7 @@ class InfinitePageController extends ScrollController {
 
   late int _currentPage = initialPage;
 
-  void jumpToPage(int index) {
+  int get page => _currentPage;
 
-  }
-
-  void animateToPage(int index) {
-
-  }
-
-  // int get page;
+  void _setCurrentPage(int index) => _currentPage = index;
 }

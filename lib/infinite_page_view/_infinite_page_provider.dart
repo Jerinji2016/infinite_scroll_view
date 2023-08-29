@@ -3,7 +3,6 @@ part of infinite_page_view;
 enum _CurrentlyScrollingPageType { parent, past, future }
 
 class _InfinitePageProvider extends ChangeNotifier {
-
   static const _animatePageDuration = Duration(milliseconds: 200);
   static const double _pastPage = 0.0, _futurePage = 1.0;
 
@@ -19,9 +18,7 @@ class _InfinitePageProvider extends ChangeNotifier {
   final PageController pastPageController = PageController();
   final PageController futurePageController = PageController();
 
-  void onPageChanged(BuildContext context, int index) {
-    debugPrint("InfinitePageProvider.onPageChanged: $index");
-  }
+  void onPageChanged(int index) => controller._setCurrentPage(index);
 
   void onPanStart(DragStartDetails details) {
     _canPageSnap = false;

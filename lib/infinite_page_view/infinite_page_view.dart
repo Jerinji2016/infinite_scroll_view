@@ -25,9 +25,12 @@ class InfinitePageView extends StatefulWidget {
 
 class _InfinitePageViewState extends State<InfinitePageView> {
   late final InfinitePageController controller = widget.controller ?? InfinitePageController();
+  late _InfinitePageProvider _provider;
 
   void _onPageChanged(int index) {
     int actualIndex = index == 0 ? -1 : 0;
+    _provider.onPageChanged(actualIndex);
+
     widget.onPageChanged?.call(actualIndex);
   }
 
@@ -43,6 +46,9 @@ class _InfinitePageViewState extends State<InfinitePageView> {
       create: (context) => _InfinitePageProvider._(controller),
       builder: (context, child) => Consumer<_InfinitePageProvider>(
         builder: (context, provider, child) {
+          _provider = provider;
+          controller._registerProviders(provider);
+
           return GestureDetector(
             onPanStart: provider.onPanStart,
             onPanUpdate: provider.onPanUpdate,
@@ -87,12 +93,13 @@ class _NestedPageView extends StatelessWidget {
   int _getOriginalIndex(int index) => reverse ? (index + 1) * -1 : index;
 
   void _onPageChanged(BuildContext context, int index) {
-    _InfinitePageProvider infinitePageProvider = Provider.of<_InfinitePageProvider>(context, listen: false);
+    final int originalIndex = _getOriginalIndex(index);
+
+    Provider.of<_InfinitePageProvider>(context, listen: false).onPageChanged(originalIndex);
 
     _InfinitePageViewState? state = context.findAncestorStateOfType<_InfinitePageViewState>();
     if (state == null) return;
 
-    final int originalIndex = _getOriginalIndex(index);
     state.widget.onPageChanged?.call(originalIndex);
   }
 
@@ -108,7 +115,7 @@ class _NestedPageView extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         int originalIndex = _getOriginalIndex(index);
-        return builder.call(context,originalIndex);
+        return builder.call(context, originalIndex);
       },
     );
   }

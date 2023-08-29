@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _onPageChanged(int index) {
-    debugPrint("_MyAppState._onPageChanged: $index");
+    debugPrint("_MyAppState._onPageChanged: in param: $index");
   }
 
   void _changePage(bool isNext) {
