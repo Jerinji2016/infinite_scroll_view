@@ -18,4 +18,12 @@ class InfinitePageController extends ScrollController {
   int get page => _currentPage;
 
   void _setCurrentPage(int index) => _currentPage = index;
+
+  void animateToPage(int index, {Duration? duration, Curve curve = Curves.ease}) {
+
+  }
+
+  void jumpToPage(int index) {
+
+  }
 }

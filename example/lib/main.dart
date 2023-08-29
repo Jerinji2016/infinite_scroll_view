@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_view/infinite_scroll_view.dart';
 
+import 'jump_to_page_panel.dart';
+import 'primary_button.dart';
+
 void main() {
   runApp(
     const MaterialApp(
@@ -34,6 +37,10 @@ class _MyAppState extends State<MyApp> {
     debugPrint("_MyAppState._changePage: is next: $isNext");
   }
 
+  void _goToPage(int page, bool shouldAnimate) {
+    debugPrint("_MyAppState._goToPage: $page, $shouldAnimate");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +71,14 @@ class _MyAppState extends State<MyApp> {
               text: "Prev",
               borderRadius: 8.0,
               prefixIcon: Icons.navigate_before,
+            ),
+          ),
+          Positioned(
+            bottom: 80.0,
+            left: 0.0,
+            right: 0.0,
+            child: JumpToPagePanel(
+              onPageIndexSelected: _goToPage,
             ),
           ),
         ],
