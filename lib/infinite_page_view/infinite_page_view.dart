@@ -26,14 +26,12 @@ class InfinitePageView extends StatefulWidget {
 
 class _InfinitePageViewState extends State<InfinitePageView> {
   late final InfinitePageController controller = widget.controller ?? InfinitePageController();
-  late _InfinitePageProvider _provider;
 
   final ValueKey _pastPageViewKey = const ValueKey("past-page-view"),
       _futurePageViewKey = const ValueKey("future-page-view");
 
   void _onPageChanged(int index) {
     int actualIndex = index == 0 ? -1 : 0;
-    _provider.onPageChanged(actualIndex);
     widget.onPageChanged?.call(actualIndex);
   }
 
@@ -49,7 +47,6 @@ class _InfinitePageViewState extends State<InfinitePageView> {
       create: (context) => _InfinitePageProvider._(controller),
       builder: (context, child) => Consumer<_InfinitePageProvider>(
         builder: (context, provider, child) {
-          _provider = provider;
           controller._registerProviders(provider);
 
           return GestureDetector(
@@ -105,8 +102,6 @@ class _NestedPageViewState extends State<_NestedPageView> with AutomaticKeepAliv
   void _onPageChanged(BuildContext context, int index) {
     final int originalIndex = _getOriginalIndex(index);
 
-    Provider.of<_InfinitePageProvider>(context, listen: false).onPageChanged(originalIndex);
-
     _InfinitePageViewState? state = context.findAncestorStateOfType<_InfinitePageViewState>();
     if (state == null) return;
 
@@ -116,7 +111,6 @@ class _NestedPageViewState extends State<_NestedPageView> with AutomaticKeepAliv
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     _InfinitePageProvider infinitePageProvider = Provider.of<_InfinitePageProvider>(context);
 
     return PageView.builder(

@@ -2,7 +2,7 @@ part of infinite_page_view;
 
 class InfinitePageController extends ScrollController {
   /// The page to show when first creating the [PageView].
-  final int initialPage;
+  final double initialPage;
 
   /// Provides this param to all [PageView] used in [InfinitePageView]
   final bool keepPage;
@@ -16,13 +16,13 @@ class InfinitePageController extends ScrollController {
 
   void _registerProviders(_InfinitePageProvider provider) => _provider = provider;
 
-  late int _currentPage = initialPage;
+  late double _page = initialPage;
 
   /// The current page displayed in the controlled [InfinitePageView].
-  int get page => _currentPage;
+  double get page => _page;
 
-  void _setCurrentPage(int index) {
-    _currentPage = index;
+  void _setPage(double value) {
+    _page = value;
     notifyListeners();
   }
 

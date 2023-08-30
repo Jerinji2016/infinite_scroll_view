@@ -17,14 +17,14 @@ class _InfinitePageProvider extends ChangeNotifier {
     int initialPastPage = 0;
     int initialFuturePage = 0;
 
-    int initialPage = controller.initialPage;
+    double initialPage = controller.initialPage;
     if (initialPage != 0) {
       if (initialPage > 0) {
         //  in future
-        initialFuturePage = initialPage;
+        initialFuturePage = initialPage.toInt();
       } else {
         initialParentPage = _pastPage;
-        initialPastPage = (initialPage + 1).abs();
+        initialPastPage = (initialPage + 1).abs().toInt();
       }
     }
 
@@ -34,27 +34,29 @@ class _InfinitePageProvider extends ChangeNotifier {
 
     parentPageController.addListener(_parentPageChangeListener);
     pastPageController.addListener(_pastPageChangeListener);
+    futurePageController.addListener(_futurePageChangeListener);
   }
 
   void _parentPageChangeListener() {
-    debugPrint("_InfinitePageProvider._parentPageChangeListener: ");
+    double page = (parentPageController.page ?? 0) - 1;
+    controller._setPage(page);
   }
 
   void _pastPageChangeListener() {
-    debugPrint("_InfinitePageProvider._pastPageChangeListener: ${pastPageController.page}");
-    int page = (pastPageController.page?.toInt() ?? 0) + 1;
-    controller._setCurrentPage(-1 * page);
+    double page = ((pastPageController.page ?? 0) + 1) * -1;
+    controller._setPage(page);
   }
 
   void _futurePageChangeListener() {
-    debugPrint("_InfinitePageProvider._futurePageChangeListener: ");
+    double page = futurePageController.page ?? 0;
+    controller._setPage(page);
   }
 
   bool _canPageSnap = true;
 
   _CurrentlyScrollingPageType? _currentlyScrollingPageType;
 
-  void onPageChanged(int index) => controller._setCurrentPage(index);
+  // void onPageChanged(int index) => controller._setPage(index.toDouble());
 
   void onPanStart(DragStartDetails details) {
     _canPageSnap = false;
@@ -142,7 +144,7 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   Future<void> animateToPage(int page, {required Duration duration, required Curve curve}) async {
-    int currentPage = controller.page;
+    double currentPage = controller.page;
     if (page == currentPage) return;
 
     if (page >= 0) {
@@ -178,7 +180,7 @@ class _InfinitePageProvider extends ChangeNotifier {
 
   void jumpToPage(int page) {
     debugPrint("_InfinitePageProvider.jumpToPage: $page");
-    int currentPage = controller.page;
+    double currentPage = controller.page;
     if (page == currentPage) return;
 
     if (page >= 0) {
@@ -203,7 +205,7 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   Future<void> nextPage({required Duration duration, required Curve curve}) async {
-    int currentPage = controller.page;
+    double currentPage = controller.page;
     if (currentPage >= 0) {
       return futurePageController.nextPage(duration: duration, curve: curve);
     }
@@ -214,7 +216,7 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   Future<void> previousPage({required Duration duration, required Curve curve}) async {
-    int currentPage = controller.page;
+    double currentPage = controller.page;
     if (currentPage < 0) {
       return pastPageController.nextPage(duration: duration, curve: curve);
     }

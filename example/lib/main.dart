@@ -29,9 +29,22 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey<JumpToPagePanelState> _jumpToPageKey = GlobalKey();
 
   @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(_listener);
+  }
+
+  void _listener() {
+    debugPrint("_MyAppState._listener: ${controller.page}");
+  }
+
+  @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    controller
+      ..removeListener(_listener)
+      ..dispose();
   }
 
   void _onPageChanged(int index) => _jumpToPageKey.currentState?.pageChanged(index);
