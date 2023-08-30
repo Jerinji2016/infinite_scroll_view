@@ -63,8 +63,9 @@ class _InfinitePageProvider extends ChangeNotifier {
 
   void onPanUpdate(DragUpdateDetails details) {
     double deltaOffset = details.delta.dx;
-    double? currentParentPage = parentPageController.page;
+    if (deltaOffset == 0) return;
 
+    double? currentParentPage = parentPageController.page;
     if (deltaOffset > 0) {
       //  swipe right
       if (currentParentPage == _pastPage) {
