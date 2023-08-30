@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 typedef OnPageIndexSelected = void Function(int index, bool shouldAnimate);
 
-const _values = [-1000, -500, -250, -100, -50, -10, -5, 0, 5, 10, 50, 100, 250, 500, 1000];
+const _pastPageIndices = [-10000, -1000, -500, -250, -100, -50, -10, -5, -2, -1];
+const _futurePageIndices = [1, 2, 5, 10, 50, 100, 250, 500, 1000, 10000];
+const _values = [..._pastPageIndices, 0, ..._futurePageIndices];
 
 class JumpToPagePanel extends StatefulWidget {
   final OnPageIndexSelected onPageIndexSelected;
@@ -14,18 +16,24 @@ class JumpToPagePanel extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<JumpToPagePanel> createState() => _JumpToPagePanelState();
+  State<JumpToPagePanel> createState() => JumpToPagePanelState();
 }
 
-class _JumpToPagePanelState extends State<JumpToPagePanel> {
+class JumpToPagePanelState extends State<JumpToPagePanel> {
   bool _shouldAnimate = true;
   double _sliderValue = 0.5;
 
-  void _onAnimateToggled(bool value) {
+  void pageChanged(int index) {
+    int valueIndex = _values.indexWhere((element) => element == index);
+    if (valueIndex == -1) return;
     setState(
-      () => _shouldAnimate = value,
+      () => _sliderValue = valueIndex / (_values.length - 1),
     );
   }
+
+  void _onAnimateToggled(bool value) => setState(
+        () => _shouldAnimate = value,
+      );
 
   void _onSliderEnd(double value) {
     int index = (_sliderValue * (_values.length - 1)).toInt();
@@ -38,8 +46,7 @@ class _JumpToPagePanelState extends State<JumpToPagePanel> {
       );
 
   void _onBackToOriginTapped() {
-    int index = (_values.length - 1) ~/ 2;
-    debugPrint("_JumpToPagePanelState._onBackToOriginTapped: $index");
+    int index = _values.indexWhere((element) => element == 0);
 
     widget.onPageIndexSelected.call(_values[index], _shouldAnimate);
     setState(
@@ -89,7 +96,7 @@ class _JumpToPagePanelState extends State<JumpToPagePanel> {
                 int index = (_sliderValue * (_values.length - 1)).toInt();
 
                 return Slider(
-                  label: "${_values[index]}",
+                  label: "Page ${_values[index]}",
                   value: _sliderValue,
                   divisions: _values.length - 1,
                   onChanged: _onSliderValueChanged,

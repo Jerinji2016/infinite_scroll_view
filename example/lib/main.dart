@@ -21,7 +21,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final InfinitePageController controller = InfinitePageController();
+  final InfinitePageController controller = InfinitePageController(
+    keepPage: true,
+    initialPage: 10,
+  );
+
+  final GlobalKey<JumpToPagePanelState> _jumpToPageKey = GlobalKey();
 
   @override
   void dispose() {
@@ -29,16 +34,28 @@ class _MyAppState extends State<MyApp> {
     controller.dispose();
   }
 
-  void _onPageChanged(int index) {
-    debugPrint("_MyAppState._onPageChanged: in param: $index");
-  }
+  void _onPageChanged(int index) => _jumpToPageKey.currentState?.pageChanged(index);
 
-  void _changePage(bool isNext) {
-    debugPrint("_MyAppState._changePage: is next: $isNext");
-  }
+  void _changePage(bool isNext) => isNext
+      ? controller.nextPage(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease,
+        )
+      : controller.previousPage(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease,
+        );
 
-  void _goToPage(int page, bool shouldAnimate) {
-    debugPrint("_MyAppState._goToPage: $page, $shouldAnimate");
+  Future<void> _goToPage(int page, bool shouldAnimate) async {
+    if (shouldAnimate) {
+      return controller.animateToPage(
+        page,
+        duration: const Duration(seconds: 2),
+        curve: Curves.ease,
+      );
+    }
+
+    return controller.jumpToPage(page);
   }
 
   @override
@@ -58,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             right: 24,
             child: PrimaryButton(
               onTap: () => _changePage(true),
-              text: "Next",
+              text: "Next Page",
               borderRadius: 8.0,
               suffixIcon: Icons.navigate_next,
             ),
@@ -68,7 +85,7 @@ class _MyAppState extends State<MyApp> {
             left: 24,
             child: PrimaryButton(
               onTap: () => _changePage(false),
-              text: "Prev",
+              text: "Prev Page",
               borderRadius: 8.0,
               prefixIcon: Icons.navigate_before,
             ),
@@ -78,6 +95,7 @@ class _MyAppState extends State<MyApp> {
             left: 0.0,
             right: 0.0,
             child: JumpToPagePanel(
+              key: _jumpToPageKey,
               onPageIndexSelected: _goToPage,
             ),
           ),

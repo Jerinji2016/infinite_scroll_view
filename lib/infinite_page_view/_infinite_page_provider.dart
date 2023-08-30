@@ -4,19 +4,55 @@ enum _CurrentlyScrollingPageType { parent, past, future }
 
 class _InfinitePageProvider extends ChangeNotifier {
   static const _animatePageDuration = Duration(milliseconds: 200);
-  static const double _pastPage = 0.0, _futurePage = 1.0;
+  static const int _pastPage = 0, _futurePage = 1;
 
   final InfinitePageController controller;
 
-  _InfinitePageProvider._(this.controller);
+  late final PageController parentPageController;
+  late final PageController pastPageController;
+  late final PageController futurePageController;
+
+  _InfinitePageProvider._(this.controller) {
+    int initialParentPage = 1;
+    int initialPastPage = 0;
+    int initialFuturePage = 0;
+
+    int initialPage = controller.initialPage;
+    if (initialPage != 0) {
+      if (initialPage > 0) {
+        //  in future
+        initialFuturePage = initialPage;
+      } else {
+        initialParentPage = _pastPage;
+        initialPastPage = (initialPage + 1).abs();
+      }
+    }
+
+    parentPageController = PageController(initialPage: initialParentPage, keepPage: true);
+    pastPageController = PageController(initialPage: initialPastPage);
+    futurePageController = PageController(initialPage: initialFuturePage);
+
+    parentPageController.addListener(_parentPageChangeListener);
+    pastPageController.addListener(_pastPageChangeListener);
+  }
+
+  void _parentPageChangeListener() {
+    debugPrint("_InfinitePageProvider._parentPageChangeListener: ");
+  }
+
+  void _pastPageChangeListener() {
+    debugPrint("_InfinitePageProvider._pastPageChangeListener: ${pastPageController.page}");
+    int page = (pastPageController.page?.toInt() ?? 0) + 1;
+    controller._setCurrentPage(-1 * page);
+  }
+
+  void _futurePageChangeListener() {
+    debugPrint("_InfinitePageProvider._futurePageChangeListener: ");
+  }
 
   bool _canPageSnap = true;
 
   _CurrentlyScrollingPageType? _currentlyScrollingPageType;
-
-  final PageController parentPageController = PageController(initialPage: 1);
-  final PageController pastPageController = PageController();
-  final PageController futurePageController = PageController();
 
   void onPageChanged(int index) => controller._setCurrentPage(index);
 
@@ -104,12 +140,101 @@ class _InfinitePageProvider extends ChangeNotifier {
     );
   }
 
+  Future<void> animateToPage(int page, {required Duration duration, required Curve curve}) async {
+    int currentPage = controller.page;
+    if (page == currentPage) return;
+
+    if (page >= 0) {
+      //  target in future
+      if (currentPage < 0) {
+        //  current in past
+        pastPageController.jumpToPage(0);
+        parentPageController.jumpToPage(_futurePage);
+      }
+
+      if (!pastPageController.hasClients) {
+        //  page controller might not be attached yet on initial load
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      return futurePageController.animateToPage(page, duration: duration, curve: curve);
+    }
+
+    //  target in past
+    if (currentPage >= 0) {
+      //  current in future
+      futurePageController.jumpToPage(0);
+      parentPageController.jumpToPage(_pastPage);
+    }
+
+    if (!pastPageController.hasClients) {
+      //  page controller might not be attached yet on initial load
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
+    int pastPage = (page + 1).abs();
+    return pastPageController.animateToPage(pastPage, duration: duration, curve: curve);
+  }
+
+  void jumpToPage(int page) {
+    debugPrint("_InfinitePageProvider.jumpToPage: $page");
+    int currentPage = controller.page;
+    if (page == currentPage) return;
+
+    if (page >= 0) {
+      //  target in future
+      if (currentPage < 0) {
+        //  current in past
+        pastPageController.jumpToPage(0);
+        parentPageController.jumpToPage(_futurePage);
+      }
+      return futurePageController.jumpToPage(page);
+    }
+
+    //  target in past
+    if (currentPage >= 0) {
+      //  current in future
+      futurePageController.jumpToPage(0);
+      parentPageController.jumpToPage(_pastPage);
+    }
+
+    int pastPage = (page + 1).abs();
+    return pastPageController.jumpToPage(pastPage);
+  }
+
+  Future<void> nextPage({required Duration duration, required Curve curve}) async {
+    int currentPage = controller.page;
+    if (currentPage >= 0) {
+      return futurePageController.nextPage(duration: duration, curve: curve);
+    }
+    if (currentPage == -1) {
+      return parentPageController.nextPage(duration: duration, curve: curve);
+    }
+    return pastPageController.previousPage(duration: duration, curve: curve);
+  }
+
+  Future<void> previousPage({required Duration duration, required Curve curve}) async {
+    int currentPage = controller.page;
+    if (currentPage < 0) {
+      return pastPageController.nextPage(duration: duration, curve: curve);
+    }
+    if (currentPage == 0) {
+      return parentPageController.previousPage(duration: duration, curve: curve);
+    }
+    return futurePageController.previousPage(duration: duration, curve: curve);
+  }
+
   @override
   void dispose() {
     super.dispose();
 
-    parentPageController.dispose();
-    pastPageController.dispose();
-    futurePageController.dispose();
+    parentPageController
+      ..removeListener(_parentPageChangeListener)
+      ..dispose();
+    pastPageController
+      ..removeListener(_pastPageChangeListener)
+      ..dispose();
+    futurePageController
+      ..removeListener(_futurePageChangeListener)
+      ..dispose();
   }
 }
