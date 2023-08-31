@@ -28,7 +28,7 @@ class _InfinitePageProvider extends ChangeNotifier {
       }
     }
 
-    parentPageController = PageController(initialPage: initialParentPage, keepPage: true);
+    parentPageController = PageController(initialPage: initialParentPage, keepPage: true, viewportFraction: 0.99);
     pastPageController = PageController(initialPage: initialPastPage, keepPage: controller.keepPage);
     futurePageController = PageController(initialPage: initialFuturePage, keepPage: controller.keepPage);
 
