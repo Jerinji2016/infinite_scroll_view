@@ -179,7 +179,6 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   void jumpToPage(int page) {
-    debugPrint("_InfinitePageProvider.jumpToPage: $page");
     double currentPage = controller.page;
     if (page == currentPage) return;
 
