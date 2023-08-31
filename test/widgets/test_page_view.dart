@@ -26,15 +26,7 @@ class _TestPageViewState extends State<TestPageView> {
       controller: widget.controller,
       onPageChanged: _onPageChanged,
       itemBuilder: (context, index) {
-        return Text(
-          "Page $index",
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.orange,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
-        );
+        return Text("Page $index");
       },
     );
   }
