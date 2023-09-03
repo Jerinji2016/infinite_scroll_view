@@ -132,27 +132,52 @@ void main() {
       );
     });
 
-    // testWidgets("Animate to Page", (WidgetTester tester) async {
-    //   InfinitePageController controller = InfinitePageController();
-    //
-    //   await tester.pumpWidget(
-    //     MaterialApp(
-    //       home: TestPageView(
-    //         controller: controller,
-    //       ),
-    //     ),
-    //   );
-    //
-    //   await controller.animateToPage(
-    //     17,
-    //     duration: const Duration(milliseconds: 100),
-    //     curve: Curves.ease,
-    //   );
-    //   expect(
-    //     find.text('Page 17'),
-    //     findsOneWidget,
-    //     reason: "controller.animateToPage() failed for +ve page value",
-    //   );
-    // });
+    testWidgets("Animate to Page", (WidgetTester tester) async {
+      InfinitePageController controller = InfinitePageController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: TestPageView(
+            controller: controller,
+          ),
+        ),
+      );
+
+      const duration = Duration(milliseconds: 100);
+
+      //  awaiting `animateToPage` method will block the test at this point
+      controller.animateToPage(17, duration: duration, curve: Curves.ease);
+
+      //  pump and settle since animateToPage cannot be awaited
+      await tester.pumpAndSettle(duration);
+      expect(
+        find.text('Page 17'),
+        findsOneWidget,
+        reason: "controller.animateToPage() failed for +ve page value",
+      );
+    });
+
+    testWidgets("Next/Previous Page", (WidgetTester tester) async {
+      InfinitePageController controller = InfinitePageController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: TestPageView(
+            controller: controller,
+          ),
+        ),
+      );
+
+      const duration = Duration(milliseconds: 100);
+
+      controller.nextPage(duration: duration, curve: Curves.ease);
+      await tester.pumpAndSettle(duration);
+      expect(find.text('Page 1'), findsOneWidget);
+
+      controller.jumpToPage(0);
+      controller.previousPage(duration: duration, curve: Curves.ease);
+      await tester.pumpAndSettle(duration);
+      expect(find.text('Page -1'), findsOneWidget);
+    });
   });
 }
