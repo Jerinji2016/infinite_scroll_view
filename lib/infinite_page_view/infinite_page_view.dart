@@ -12,12 +12,14 @@ class InfinitePageView extends StatefulWidget {
   final InfinitePageController? controller;
   final InfinitePageBuilder itemBuilder;
   final OnPageChanged? onPageChanged;
+  final bool pageSnapping;
 
   const InfinitePageView({
     Key? key,
     required this.itemBuilder,
     this.controller,
     this.onPageChanged,
+    this.pageSnapping = true,
   }) : super(key: key);
 
   @override
@@ -44,17 +46,19 @@ class _InfinitePageViewState extends State<InfinitePageView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => _InfinitePageProvider._(controller),
+      create: (context) => _InfinitePageProvider._(this, controller),
       builder: (context, child) => Consumer<_InfinitePageProvider>(
         builder: (context, provider, child) {
           controller._registerProviders(provider);
+
+          bool canPageSnap = provider._isPageSnapDisabled && widget.pageSnapping;
 
           return GestureDetector(
             onPanStart: provider.onPanStart,
             onPanUpdate: provider.onPanUpdate,
             onPanEnd: provider.onPanEnd,
             child: PageView(
-              pageSnapping: provider._canPageSnap,
+              pageSnapping: canPageSnap,
               controller: provider.parentPageController,
               scrollBehavior: const MaterialScrollBehavior(),
               physics: const NeverScrollableScrollPhysics(),
@@ -65,11 +69,13 @@ class _InfinitePageViewState extends State<InfinitePageView> {
                   controller: provider.pastPageController,
                   reverse: true,
                   builder: widget.itemBuilder,
+                  pageSnapping: widget.pageSnapping,
                 ),
                 _NestedPageView(
                   key: _futurePageViewKey,
                   controller: provider.futurePageController,
                   builder: widget.itemBuilder,
+                  pageSnapping: widget.pageSnapping,
                 ),
               ],
             ),
@@ -84,12 +90,14 @@ class _NestedPageView extends StatefulWidget {
   final PageController controller;
   final bool reverse;
   final InfinitePageBuilder builder;
+  final bool pageSnapping;
 
   const _NestedPageView({
     Key? key,
     required this.controller,
     required this.builder,
     this.reverse = false,
+    required this.pageSnapping,
   }) : super(key: key);
 
   @override
@@ -113,11 +121,13 @@ class _NestedPageViewState extends State<_NestedPageView> with AutomaticKeepAliv
     super.build(context);
     _InfinitePageProvider infinitePageProvider = Provider.of<_InfinitePageProvider>(context);
 
+    bool canPageSnap = infinitePageProvider._isPageSnapDisabled && widget.pageSnapping;
+
     return PageView.builder(
       controller: widget.controller,
       reverse: widget.reverse,
       onPageChanged: (index) => _onPageChanged(context, index),
-      pageSnapping: infinitePageProvider._canPageSnap,
+      pageSnapping: canPageSnap,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         int originalIndex = _getOriginalIndex(index);

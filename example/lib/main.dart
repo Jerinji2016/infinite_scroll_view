@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _listener() {
-    debugPrint("_MyAppState._listener: ${controller.page}");
+    debugPrint("_MyAppState._listener: page: ${controller.page}");
   }
 
   @override
@@ -77,6 +77,7 @@ class _MyAppState extends State<MyApp> {
       body: Stack(
         children: [
           InfinitePageView(
+            pageSnapping: false,
             controller: controller,
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {

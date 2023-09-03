@@ -6,13 +6,15 @@ class _InfinitePageProvider extends ChangeNotifier {
   static const _animatePageDuration = Duration(milliseconds: 200);
   static const int _pastPage = 0, _futurePage = 1;
 
+  final _InfinitePageViewState _pageViewState;
+
   final InfinitePageController controller;
 
   late final PageController parentPageController;
   late final PageController pastPageController;
   late final PageController futurePageController;
 
-  _InfinitePageProvider._(this.controller) {
+  _InfinitePageProvider._(this._pageViewState, this.controller) {
     int initialParentPage = 1;
     int initialPastPage = 0;
     int initialFuturePage = 0;
@@ -52,14 +54,12 @@ class _InfinitePageProvider extends ChangeNotifier {
     controller._setPage(page);
   }
 
-  bool _canPageSnap = true;
+  bool _isPageSnapDisabled = true;
 
   _CurrentlyScrollingPageType? _currentlyScrollingPageType;
 
-  // void onPageChanged(int index) => controller._setPage(index.toDouble());
-
   void onPanStart(DragStartDetails details) {
-    _canPageSnap = false;
+    _isPageSnapDisabled = false;
     notifyListeners();
   }
 
@@ -108,11 +108,11 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   void onPanEnd(DragEndDetails details) {
-    _canPageSnap = true;
+    _isPageSnapDisabled = true;
     notifyListeners();
 
     double swipeVelocity = details.velocity.pixelsPerSecond.dx;
-    if (swipeVelocity.abs() < 1000.0) return;
+    if (swipeVelocity.abs() < 1000.0 || !_pageViewState.widget.pageSnapping) return;
 
     bool isSwipeLeft = swipeVelocity < 0;
 
