@@ -7,15 +7,39 @@ import 'package:provider/provider.dart';
 import '../common/types.dart';
 
 part '_infinite_page_provider.dart';
-
 part 'infinite_page_controller.dart';
 
+/// # InfinitePageView
+///
+/// Widget that works similar to [PageView] but can scroll infinitely in either sides
+///
+/// ***
+///
+/// __Under the hood:__ [InfinitePageView] uses Nested PageViews to achieve the desired working
+///
+/// __Warning:__ Unlike PageView this widget doesn't support viewport fraction.
+///
+/// ***
+///
+/// Found any issues?
+/// Feel free to report on: https://github.com/Jerinji2016/infinite_scroll_view/issues
 class InfinitePageView extends StatefulWidget {
+  /// Controller to take control over [InfinitePageView]
   final InfinitePageController? controller;
+
+  /// Each page will be build with this function
   final InfinitePageBuilder itemBuilder;
+
+  /// Callback on page changed
   final OnPageChanged? onPageChanged;
+
+  /// Disable page snapping, enabled by default
   final bool pageSnapping;
+
+  /// Drag start behaviour, this value is directly passed to PageViews used in this widget
   final DragStartBehavior dragStartBehavior;
+
+  /// ScrollBehaviour, this value is directly passed to PageViews used in this widget
   final ScrollBehavior? scrollBehavior;
 
   const InfinitePageView({
