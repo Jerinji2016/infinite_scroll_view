@@ -1,8 +1,10 @@
 library infinite_page_view;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_view/common/types.dart';
 import 'package:provider/provider.dart';
+
+import '../common/types.dart';
 
 part '_infinite_page_provider.dart';
 
@@ -13,6 +15,7 @@ class InfinitePageView extends StatefulWidget {
   final InfinitePageBuilder itemBuilder;
   final OnPageChanged? onPageChanged;
   final bool pageSnapping;
+  final DragStartBehavior dragStartBehavior;
   final ScrollBehavior? scrollBehavior;
 
   const InfinitePageView({
@@ -22,6 +25,7 @@ class InfinitePageView extends StatefulWidget {
     this.onPageChanged,
     this.pageSnapping = true,
     this.scrollBehavior,
+    this.dragStartBehavior = DragStartBehavior.start,
   }) : super(key: key);
 
   @override
@@ -65,6 +69,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
               scrollBehavior: widget.scrollBehavior,
               physics: const NeverScrollableScrollPhysics(),
               onPageChanged: _onPageChanged,
+              dragStartBehavior: widget.dragStartBehavior,
               children: [
                 _NestedPageView(
                   key: _pastPageViewKey,
@@ -73,6 +78,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
                   builder: widget.itemBuilder,
                   pageSnapping: widget.pageSnapping,
                   scrollBehavior: widget.scrollBehavior,
+                  dragStartBehavior: widget.dragStartBehavior,
                 ),
                 _NestedPageView(
                   key: _futurePageViewKey,
@@ -80,6 +86,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
                   builder: widget.itemBuilder,
                   pageSnapping: widget.pageSnapping,
                   scrollBehavior: widget.scrollBehavior,
+                  dragStartBehavior: widget.dragStartBehavior,
                 ),
               ],
             ),
@@ -96,6 +103,7 @@ class _NestedPageView extends StatefulWidget {
   final InfinitePageBuilder builder;
   final bool pageSnapping;
   final ScrollBehavior? scrollBehavior;
+  final DragStartBehavior dragStartBehavior;
 
   const _NestedPageView({
     Key? key,
@@ -103,7 +111,8 @@ class _NestedPageView extends StatefulWidget {
     required this.builder,
     this.reverse = false,
     required this.pageSnapping,
-    this.scrollBehavior,
+    required this.scrollBehavior,
+    required this.dragStartBehavior,
   }) : super(key: key);
 
   @override
@@ -135,6 +144,7 @@ class _NestedPageViewState extends State<_NestedPageView> with AutomaticKeepAliv
       onPageChanged: (index) => _onPageChanged(context, index),
       pageSnapping: canPageSnap,
       scrollBehavior: widget.scrollBehavior,
+      dragStartBehavior: widget.dragStartBehavior,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         int originalIndex = _getOriginalIndex(index);
