@@ -115,18 +115,18 @@ void main() {
         ),
       );
 
-      controller.jumpToPage(12);
+      controller.jumpToPage(12000);
       await tester.pump();
       expect(
-        find.text('Page 12'),
+        find.text('Page 12000'),
         findsOneWidget,
         reason: "controller.jumpToPage() failed for +ve page value",
       );
 
-      controller.jumpToPage(-10);
+      controller.jumpToPage(-10000);
       await tester.pump();
       expect(
-        find.text('Page -10'),
+        find.text('Page -10000'),
         findsOneWidget,
         reason: "controller.jumpToPage() failed for -ve page value",
       );
