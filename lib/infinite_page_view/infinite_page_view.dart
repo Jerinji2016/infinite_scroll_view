@@ -13,6 +13,7 @@ class InfinitePageView extends StatefulWidget {
   final InfinitePageBuilder itemBuilder;
   final OnPageChanged? onPageChanged;
   final bool pageSnapping;
+  final ScrollBehavior? scrollBehavior;
 
   const InfinitePageView({
     Key? key,
@@ -20,6 +21,7 @@ class InfinitePageView extends StatefulWidget {
     this.controller,
     this.onPageChanged,
     this.pageSnapping = true,
+    this.scrollBehavior,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
             child: PageView(
               pageSnapping: canPageSnap,
               controller: provider.parentPageController,
-              scrollBehavior: const MaterialScrollBehavior(),
+              scrollBehavior: widget.scrollBehavior,
               physics: const NeverScrollableScrollPhysics(),
               onPageChanged: _onPageChanged,
               children: [
@@ -70,12 +72,14 @@ class _InfinitePageViewState extends State<InfinitePageView> {
                   reverse: true,
                   builder: widget.itemBuilder,
                   pageSnapping: widget.pageSnapping,
+                  scrollBehavior: widget.scrollBehavior,
                 ),
                 _NestedPageView(
                   key: _futurePageViewKey,
                   controller: provider.futurePageController,
                   builder: widget.itemBuilder,
                   pageSnapping: widget.pageSnapping,
+                  scrollBehavior: widget.scrollBehavior,
                 ),
               ],
             ),
@@ -91,6 +95,7 @@ class _NestedPageView extends StatefulWidget {
   final bool reverse;
   final InfinitePageBuilder builder;
   final bool pageSnapping;
+  final ScrollBehavior? scrollBehavior;
 
   const _NestedPageView({
     Key? key,
@@ -98,6 +103,7 @@ class _NestedPageView extends StatefulWidget {
     required this.builder,
     this.reverse = false,
     required this.pageSnapping,
+    this.scrollBehavior,
   }) : super(key: key);
 
   @override
@@ -128,6 +134,7 @@ class _NestedPageViewState extends State<_NestedPageView> with AutomaticKeepAliv
       reverse: widget.reverse,
       onPageChanged: (index) => _onPageChanged(context, index),
       pageSnapping: canPageSnap,
+      scrollBehavior: widget.scrollBehavior,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         int originalIndex = _getOriginalIndex(index);
