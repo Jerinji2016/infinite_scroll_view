@@ -1,10 +1,10 @@
---
+---
 
 name: 🔙 Regression
 about: Report unexpected behavior that worked previously
---
+---
 
-\## 🔙 Regression
+## 🔙 Regression
 
 <!--- Summary description of the regression --->
 
