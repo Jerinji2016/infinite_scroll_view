@@ -51,11 +51,10 @@ InfinitePageView(
 
 ### InfinitePageView
 
-Works by creating a __PageView__ with 2 pages which in turn are __PageViews__. Both PageViews is respectively controller under the hood to get the desired flow.
+Works by creating a __PageView__ with 2 pages which in turn are __PageViews__. Both PageViews are respectively controlled under the hood to get the desired working.
 
 ## TODO  
 
-- Update README.md
 - Work on CI/CD for example app and to publish to pub
 - Create InfiniteListView
 
