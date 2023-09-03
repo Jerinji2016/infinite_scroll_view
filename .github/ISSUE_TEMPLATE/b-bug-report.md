@@ -4,14 +4,14 @@ name: 🐛 Bug Report
 about: Create a report to help us fix bugs and make improvements
 ---
 
-## 🐛 Bug Report
+# 🐛 Bug Report
 
 <!--- Summary description of the bug --->
 
-### Expected behavior
+## Expected behavior
 
-### Reproduction steps
+## Reproduction steps
 
-### Configuration
+## Configuration
 
 **Version:** 0.x
