@@ -49,6 +49,43 @@ void main() {
       await tester.pump();
       expect(find.text('Page -1'), findsOneWidget);
     });
+
+    testWidgets("Page Snapping", (WidgetTester tester) async {
+      InfinitePageController controller = InfinitePageController();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InfinitePageView(
+            controller: controller,
+            itemBuilder: (context, index) => Text(
+              "Page $index",
+            ),
+          ),
+        ),
+      );
+
+      await tester.drag(
+        find.byType(InfinitePageView),
+        const Offset(200, 0),
+      );
+      await tester.pump();
+      expect(
+        "-0.252525",
+        controller.page.toStringAsFixed(6),
+        reason: "page snapping to positive value has issue",
+      );
+      await tester.pumpAndSettle();
+
+      await tester.drag(
+        find.byType(InfinitePageView),
+        const Offset(-200, 0),
+      );
+      await tester.pump();
+      expect(
+        "0.252525",
+        controller.page.toStringAsFixed(6),
+        reason: "page snapping to positive value has issue",
+      );
+    });
   });
 
   group("Controller Tests", () {
