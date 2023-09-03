@@ -40,7 +40,6 @@ from the package authors, and more.
 
 ## TODO:
 
-1. Update README.md
-2. Write tests for controller and infinite widgets
-3. Work on CI/CD for example app and to publish to pub
-4. Create InfiniteListView 
+- Update README.md 
+- Work on CI/CD for example app and to publish to pub 
+- Create InfiniteListView 
