@@ -16,15 +16,10 @@ class TestPageView extends StatefulWidget {
 class _TestPageViewState extends State<TestPageView> {
   late final InfinitePageController controller = widget.controller ?? InfinitePageController();
 
-  late int currentIndex = controller.page.toInt();
-
-  void _onPageChanged(int index) => currentIndex = index;
-
   @override
   Widget build(BuildContext context) {
     return InfinitePageView(
       controller: widget.controller,
-      onPageChanged: _onPageChanged,
       itemBuilder: (context, index) {
         return Text("Page $index");
       },
