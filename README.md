@@ -1,45 +1,64 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Infinite Scoll View
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+[![pub package](https://img.shields.io/pub/v/infinite_scroll_view.svg)](https://pub.dartlang.org/packages/infinite_scroll_view) <!-- TODO: Check if fixed after publishing -->
+[![codecov](https://codecov.io/gh/infinite_scroll_view/branch/master/graph/badge.svg?token=I5qW0RvoXN)](https://codecov.io/gh/infinite_scroll_view) <!-- TODO: Fix while doing CI/CD -->
+[![Build Status](https://github.com/Baseflow/flutter_cached_network_image/workflows/app_facing_package/badge.svg?branch=develop)](https://github.com/Baseflow/flutter_cached_network_image/actions/workflows/app_facing_package.yaml) <!-- TODO: Fix while doing CI/CD -->
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+A flutter library for scroll views that can be scrolled in either directions infinitely.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+To install package go to your terminal and run
+
+```dart
+flutter pub add infinite_scroll_view
+```
+
+or add `infinite_scroll_view` to your _pubspec.yaml_
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Using InfinitePageView
 
 ```dart
-const like = 'sample';
+InfinitePageView(
+    onPageChanged: (index) {
+        print('$index');
+    },
+    itemBuilder: (context, index) {
+        return Text("Page $index");
+    },
+)
 ```
 
-## Additional information
+Use a controller to take control over `InfinitePageView`
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+final InfinitePageController controller = InfinitePageController();
 
-## TODO:
+// ...
 
-- Update README.md 
-- Work on CI/CD for example app and to publish to pub 
-- Create InfiniteListView 
+InfinitePageView(
+    controller: controller,
+    itemBuilder: (context, index) {
+        return Text("Page $index");
+    },
+)
+
+```
+
+## How it works
+
+### InfinitePageView
+
+Works by creating a __PageView__ with 2 pages which in turn are __PageViews__. Both PageViews is respectively controller under the hood to get the desired flow.
+
+## TODO  
+
+- Update README.md
+- Work on CI/CD for example app and to publish to pub
+- Create InfiniteListView
+
+## Constraints
+
+- InfinitePageView does not support viewport fraction
