@@ -1,4 +1,4 @@
-name: flutter_tests
+name: Check Flutter Format and Tests
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the develop branch
@@ -47,7 +47,7 @@ jobs:
           channel: stable
           cache: true
           cache-key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
-          cache-path: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+          cache-path: /opt/hostedtoolcache/flutter
           architecture: x64
 
       - run: ls -la
