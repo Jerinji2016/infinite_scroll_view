@@ -48,7 +48,6 @@ jobs:
           cache: true
           cache-key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
           cache-path: /opt/hostedtoolcache/flutter
-          architecture: x64
 
       - run: ls -la
 
