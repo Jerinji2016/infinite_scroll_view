@@ -31,15 +31,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Check for existing Flutter SDK caches
-      # - name: Cache Flutter dependencies
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: '${{runner.tool_cache}}/flutter'
-      #     key: '${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}'
-
-      - run: echo '${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}'
-
       # Setup Flutter SDK from Cache or cache new
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
@@ -50,8 +41,6 @@ jobs:
           cache-key: '${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}'
           cache-path: '${{runner.tool_cache}}/flutter'
           architecture: x64
-
-      - run: ls -la
 
       # Log Flutter version
       - name: Log Flutter version
@@ -67,10 +56,12 @@ jobs:
 
       # Run Flutter tests to ensure basic working
       - name: Run Flutter Tests
-        run: flutter test
+        run: flutter test --coverage
 
       # Upload code coverage details to Codecov
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
+          name: Infinite Scroll View (CI Check)
+          file: coverage/lcov.info
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
