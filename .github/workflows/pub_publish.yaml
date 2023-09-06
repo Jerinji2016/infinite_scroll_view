@@ -4,6 +4,7 @@ name: Publish on Pub
 on:
   push:
     tags: 
+      branch: [ master ]
       # tag pattern on pub.dev: 'v'
       - 'v[0-9]+.[0-9]+.[0-9]+*'
 
