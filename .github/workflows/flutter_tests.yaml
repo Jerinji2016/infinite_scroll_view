@@ -13,6 +13,10 @@ on:
   #   paths:
   #     - '**'
 
+env:
+  flutter_version: '3.7.12'
+  # java_version: 11
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   format:
@@ -27,11 +31,22 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
         with:
-          channel: 'stable'
-          flutter-version: '3.7.12'
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+
+      # Setup Flutter SDK from Cache or cache new
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.flutter_version }}
+          channel: stable
+          cache: true
+          cache-key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+          cache-path: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+          architecture: x64
 
       # Log Flutter version
       - name: Log Flutter version
