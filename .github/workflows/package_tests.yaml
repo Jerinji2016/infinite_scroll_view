@@ -1,17 +1,16 @@
-name: Check Flutter Format and Tests
+name: Package Tests
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the develop branch
 on:
   push:
-    # branches: [ develop, master ]
-    branches: [ feature_ci_cd ]
+    branches: [ master, feature_ci_cd ]
     paths:
       - '**'
-  # pull_request:
-  #   branches: [ develop ]
-  #   paths:
-  #     - '**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - '**'
 
 env:
   flutter_version: '3.7.12'
