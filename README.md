@@ -55,7 +55,6 @@ Works by creating a __PageView__ with 2 pages which in turn are __PageViews__. B
 
 ## TODO  
 
-- Work on CI/CD for example app and to publish to pub
 - Create InfiniteListView
 
 ## Constraints
