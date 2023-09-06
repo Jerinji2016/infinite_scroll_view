@@ -43,4 +43,4 @@ jobs:
 
       # Run Dart Format to ensure formatting is valid
       - name: Run Dart Format
-        run: dart format -l 120 --set-exit-if-changed
+        run: dart format -l 120 --set-exit-if-changed ./
