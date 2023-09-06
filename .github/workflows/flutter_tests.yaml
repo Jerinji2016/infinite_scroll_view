@@ -31,6 +31,8 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - run: ls
+
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
@@ -47,6 +49,8 @@ jobs:
           cache-key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
           cache-path: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
           architecture: x64
+
+      - run: ls -la
 
       # Log Flutter version
       - name: Log Flutter version
