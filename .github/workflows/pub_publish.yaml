@@ -13,6 +13,8 @@ env:
 
 jobs:
   publish:
+    name: Publish to Pub
+
     permissions:
       # Required for authentication using OIDC
       id-token: write
@@ -41,5 +43,5 @@ jobs:
         run: dart pub get
         
       - name: Publish to pub
-        run: dart pub publish
+        run: dart pub publish --force
 
