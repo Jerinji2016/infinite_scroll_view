@@ -1,8 +1,8 @@
 # Infinite Scoll View
 
 [![pub package](https://img.shields.io/pub/v/infinite_scroll_view.svg)](https://pub.dartlang.org/packages/infinite_scroll_view) <!-- TODO: Check if fixed after publishing -->
-[![codecov](https://codecov.io/gh/infinite_scroll_view/branch/master/graph/badge.svg?token=I5qW0RvoXN)](https://codecov.io/gh/infinite_scroll_view) <!-- TODO: Fix while doing CI/CD -->
-[![Build Status](https://github.com/Baseflow/flutter_cached_network_image/workflows/app_facing_package/badge.svg?branch=develop)](https://github.com/Baseflow/flutter_cached_network_image/actions/workflows/app_facing_package.yaml) <!-- TODO: Fix while doing CI/CD -->
+[![codecov](https://codecov.io/gh/Jerinji2016/infinite_scroll_view/branch/feature_ci_cd/graph/badge.svg)](https://codecov.io/gh/infinite_scroll_view)
+[![Build Status](https://github.com/Jerinji2016/infinite_scroll_view/workflows/Package%20Tests/badge.svg?branch=feature_ci_cd)](https://github.com/Jerinji2016/infinite_scroll_view/actions/workflows/flutter_tests.yaml)
 
 A flutter library for scroll views that can be scrolled in either directions infinitely.
 
