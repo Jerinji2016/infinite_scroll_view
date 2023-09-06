@@ -1,16 +1,16 @@
 name: Package Tests
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the develop branch
+# events but only for the develop master
 on:
   push:
     branches: [ master ]
     paths:
       - '**'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - '**'
+  # pull_request:
+  #   branches: [ master ]
+  #   paths:
+  #     - '**'
 
 env:
   flutter_version: '3.7.12'
