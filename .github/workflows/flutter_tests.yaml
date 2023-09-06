@@ -33,11 +33,13 @@ jobs:
 
       - run: ls
 
+      - run: echo ${{runner.tool_cache}}
+
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
         with:
           path: /opt/hostedtoolcache/flutter
-          key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+          key: '${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}'
 
       # Setup Flutter SDK from Cache or cache new
       - name: Setup Flutter SDK
@@ -46,8 +48,9 @@ jobs:
           flutter-version: ${{ env.flutter_version }}
           channel: stable
           cache: true
-          cache-key: ${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}
+          cache-key: '${{ runner.OS }}-flutter-sdk-cache-${{ env.flutter_version }}'
           cache-path: /opt/hostedtoolcache/flutter
+          architecture: x64
 
       - run: ls -la
 
