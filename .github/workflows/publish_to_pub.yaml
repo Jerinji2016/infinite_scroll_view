@@ -3,7 +3,6 @@ name: Publish on Pub
 # Controls when the action will run. Triggers the workflow on push to master
 on:
   push:
-    branches: [ master ]
     tags: 
       # tag pattern on pub.dev: 'v'
       - 'v[0-9]+.[0-9]+.[0-9]+*'
@@ -25,7 +24,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
       
-      # Setup Flutter SDK from Cache or cache new
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
         with:
