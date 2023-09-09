@@ -7,10 +7,10 @@ on:
     branches: [ master ]
     paths:
       - '**'
-  # pull_request:
-  #   branches: [ master ]
-  #   paths:
-  #     - '**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - '**'
 
 env:
   flutter_version: '3.7.12'
