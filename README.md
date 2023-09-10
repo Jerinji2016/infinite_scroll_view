@@ -1,6 +1,6 @@
 # Infinite Scoll View
 
-[![pub package](https://img.shields.io/pub/v/infinite_scroll_view.svg)](https://pub.dartlang.org/packages/infinite_scroll_view) <!-- TODO: Check if fixed after publishing -->
+[![pub package](https://img.shields.io/pub/v/infinite_scroll_view.svg)](https://pub.dartlang.org/packages/infinite_scroll_view)
 [![codecov](https://codecov.io/gh/Jerinji2016/infinite_scroll_view/branch/master/graph/badge.svg)](https://codecov.io/gh/infinite_scroll_view)
 [![Build Status](https://github.com/Jerinji2016/infinite_scroll_view/workflows/Package%20Tests/badge.svg?branch=master)](https://github.com/Jerinji2016/infinite_scroll_view/actions/workflows/flutter_tests.yaml)
 
