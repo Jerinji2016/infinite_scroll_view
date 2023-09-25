@@ -64,7 +64,7 @@ class _InfinitePageProvider extends ChangeNotifier {
   }
 
   void onPanUpdate(DragUpdateDetails details) {
-    double deltaOffset = details.delta.dx;
+    double deltaOffset = _pageViewState.widget.scrollDirection == Axis.horizontal ? details.delta.dx : details.delta.dy;
     if (deltaOffset == 0) return;
 
     double? currentParentPage = parentPageController.page;
