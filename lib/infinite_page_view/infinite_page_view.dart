@@ -93,7 +93,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
             onPanEnd: provider.onPanEnd,
             child: PageView(
               pageSnapping: canPageSnap,
-              scrollDirection: Axis.vertical,
+              scrollDirection: widget.scrollDirection,
               controller: provider.parentPageController,
               scrollBehavior: widget.scrollBehavior,
               physics: const NeverScrollableScrollPhysics(),
