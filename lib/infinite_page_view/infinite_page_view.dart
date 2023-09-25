@@ -41,7 +41,8 @@ class InfinitePageView extends StatefulWidget {
 
   /// ScrollBehaviour, this value is directly passed to PageViews used in this widget
   final ScrollBehavior? scrollBehavior;
-  
+
+  /// Axis in which the view is supposed to scroll
   final Axis scrollDirection;
 
   const InfinitePageView({
