@@ -16,7 +16,7 @@ void main() {
       expect(find.text('Page 0'), findsOneWidget);
     });
 
-    testWidgets("Swipe between pages", (WidgetTester tester) async {
+    testWidgets("Swipe between horizontal pages", (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: TestPageView(),
@@ -26,7 +26,7 @@ void main() {
       expect(
         find.text('Page 0'),
         findsOneWidget,
-        reason: "Failed to initialize with -ve page value",
+        reason: "Failed to initialize widget",
       );
 
       await tester.drag(
@@ -45,6 +45,45 @@ void main() {
       await tester.drag(
         find.byType(InfinitePageView),
         const Offset(200, 0),
+      );
+      await tester.pump();
+      expect(find.text('Page -1'), findsOneWidget);
+    });
+
+    testWidgets("Swipe between vertical pages", (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: InfinitePageView(
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return Text("Page $index");
+            },
+          ),
+        ),
+      );
+
+      expect(
+        find.text('Page 0'),
+        findsOneWidget,
+        reason: "Failed to initialize widget",
+      );
+
+      await tester.drag(
+        find.byType(InfinitePageView),
+        const Offset(0, -200),
+      );
+      await tester.pump();
+      expect(find.text('Page 1'), findsOneWidget);
+
+      await tester.drag(
+        find.byType(InfinitePageView),
+        const Offset(0, 200),
+      );
+      await tester.pump();
+
+      await tester.drag(
+        find.byType(InfinitePageView),
+        const Offset(0, 200),
       );
       await tester.pump();
       expect(find.text('Page -1'), findsOneWidget);
