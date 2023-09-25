@@ -77,7 +77,8 @@ class _MyAppState extends State<MyApp> {
       body: Stack(
         children: [
           InfinitePageView(
-            pageSnapping: false,
+            pageSnapping: true,
+            scrollDirection: Axis.vertical,
             controller: controller,
             onPageChanged: _onPageChanged,
             itemBuilder: (context, index) {

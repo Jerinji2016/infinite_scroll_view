@@ -31,20 +31,20 @@ void main() {
 
       await tester.drag(
         find.byType(InfinitePageView),
-        const Offset(-200, 100),
+        const Offset(-200, 0),
       );
       await tester.pump();
       expect(find.text('Page 1'), findsOneWidget);
 
       await tester.drag(
         find.byType(InfinitePageView),
-        const Offset(200, 100),
+        const Offset(200, 0),
       );
       await tester.pump();
 
       await tester.drag(
         find.byType(InfinitePageView),
-        const Offset(200, 100),
+        const Offset(200, 0),
       );
       await tester.pump();
       expect(find.text('Page -1'), findsOneWidget);
