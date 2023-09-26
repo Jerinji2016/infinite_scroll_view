@@ -1,3 +1,4 @@
+import 'package:example/list_view/example_list_view.dart';
 import 'package:example/page_view/example_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_view/infinite_scroll_view.dart';
@@ -43,7 +44,7 @@ class _ExampleAppState extends State<ExampleApp> with TickerProviderStateMixin {
         return const ExamplePageView();
       case 1:
       default:
-        return const Placeholder();
+        return const ExampleListView();
     }
   }
 
