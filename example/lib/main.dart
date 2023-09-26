@@ -1,143 +1,88 @@
+import 'package:example/page_view/example_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_view/infinite_scroll_view.dart';
 
-import 'jump_to_page_panel.dart';
+import 'page_view/jump_to_page_panel.dart';
 import 'primary_button.dart';
 
 void main() {
   runApp(
     const MaterialApp(
-      home: MyApp(),
+      home: ExampleApp(),
       debugShowCheckedModeBanner: false,
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class ExampleApp extends StatefulWidget {
+  const ExampleApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<ExampleApp> createState() => _ExampleAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final InfinitePageController controller = InfinitePageController(
-    keepPage: true,
-    initialPage: 10,
-  );
-
-  final GlobalKey<JumpToPagePanelState> _jumpToPageKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller.addListener(_listener);
-  }
-
-  void _listener() {
-    debugPrint("_MyAppState._listener: page: ${controller.page}");
-  }
+class _ExampleAppState extends State<ExampleApp> with TickerProviderStateMixin {
+  late final TabController controller = TabController(length: 2, vsync: this);
 
   @override
   void dispose() {
     super.dispose();
-    controller
-      ..removeListener(_listener)
-      ..dispose();
+    controller.dispose();
   }
 
-  void _onPageChanged(int index) => _jumpToPageKey.currentState?.pageChanged(index);
-
-  void _changePage(bool isNext) => isNext
-      ? controller.nextPage(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-        )
-      : controller.previousPage(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.ease,
-        );
-
-  Future<void> _goToPage(int page, bool shouldAnimate) async {
-    if (shouldAnimate) {
-      return controller.animateToPage(
-        page,
-        duration: const Duration(seconds: 2),
-        curve: Curves.ease,
-      );
-    }
-
-    return controller.jumpToPage(page);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          InfinitePageView(
-            pageSnapping: true,
-            scrollDirection: Axis.vertical,
-            controller: controller,
-            onPageChanged: _onPageChanged,
-            itemBuilder: (context, index) {
-              return _Page(index: index);
-            },
-          ),
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: PrimaryButton(
-              onTap: () => _changePage(true),
-              text: "Next Page",
-              borderRadius: 8.0,
-              suffixIcon: Icons.navigate_next,
-            ),
-          ),
-          Positioned(
-            bottom: 24,
-            left: 24,
-            child: PrimaryButton(
-              onTap: () => _changePage(false),
-              text: "Prev Page",
-              borderRadius: 8.0,
-              prefixIcon: Icons.navigate_before,
-            ),
-          ),
-          Positioned(
-            bottom: 80.0,
-            left: 0.0,
-            right: 0.0,
-            child: JumpToPagePanel(
-              key: _jumpToPageKey,
-              onPageIndexSelected: _goToPage,
-            ),
-          ),
-        ],
-      ),
+  Widget _getTabHeader(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Text(text),
     );
   }
-}
 
-class _Page extends StatelessWidget {
-  final int index;
-
-  const _Page({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
+  Widget _getTabBarView(int index) {
+    switch (index) {
+      case 0:
+        return const ExamplePageView();
+      case 1:
+      default:
+        return const Placeholder();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "Page $index",
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          color: Colors.orange,
-          fontWeight: FontWeight.bold,
-          fontSize: 18.0,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            TabBar(
+              controller: controller,
+              automaticIndicatorColorAdjustment: true,
+              labelStyle: const TextStyle(
+                color: Colors.orange,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+              indicatorColor: Colors.orange,
+              labelColor: Colors.orange,
+              unselectedLabelColor: Colors.grey[300]!,
+              unselectedLabelStyle: const TextStyle(
+                color: Colors.red,
+                fontSize: 14.0,
+              ),
+              tabs: [
+                _getTabHeader("Page"),
+                _getTabHeader("List"),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: controller,
+                children: [
+                  _getTabBarView(0),
+                  _getTabBarView(1),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
