@@ -28,7 +28,7 @@ class InfinitePageView extends StatefulWidget {
   final InfinitePageController? controller;
 
   /// Each page will be build with this function
-  final InfinitePageBuilder itemBuilder;
+  final InfiniteItemBuilder itemBuilder;
 
   /// Callback on page changed
   final OnPageChanged? onPageChanged;
@@ -131,7 +131,7 @@ class _InfinitePageViewState extends State<InfinitePageView> {
 class _NestedPageView extends StatefulWidget {
   final PageController controller;
   final bool reverse;
-  final InfinitePageBuilder builder;
+  final InfiniteItemBuilder builder;
   final bool pageSnapping;
   final ScrollBehavior? scrollBehavior;
   final DragStartBehavior dragStartBehavior;
